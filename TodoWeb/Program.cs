@@ -185,14 +185,14 @@ builder.Services.AddAuthentication(options =>
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
-    .WriteTo.File("C:\\Users\\DELL\\OneDrive\\Desktop\\Logs\\log.txt",
+    .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "applog.txt"),
         rollingInterval: RollingInterval.Minute)
     .CreateLogger();
 builder.Host.UseSerilog();
 
 ExcelPackage.License.SetNonCommercialPersonal("Thuan");
 
-builder.Services.AddHangfire(x => x.UseSqlServerStorage("Server=DESKTOP-TUDP88B\\SQLEXPRESS;Database=ToDoApp;Trusted_Connection=True;TrustServerCertificate=True"));
+builder.Services.AddHangfire(x => x.UseSqlServerStorage("Server=localhost;Database=ToDoApp;User Id=sa;Password=StrongPassword123!;TrustServerCertificate=True;"));
 builder.Services.AddHangfireServer();
 
 //DI Containers, IServiceProvider

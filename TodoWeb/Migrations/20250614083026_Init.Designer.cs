@@ -12,8 +12,8 @@ using TodoWeb.Infrastructures;
 namespace TodoWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250606123456_refresh_token3")]
-    partial class refresh_token3
+    [Migration("20250614083026_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
