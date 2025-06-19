@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TodoWeb.Application.Dtos.ExamQuestionModel;
-using TodoWeb.Application.Services.ExamQuestions;
+using TodoWeb.Service.Services.ExamQuestions;
 
 namespace TodoWeb.Controllers
 {

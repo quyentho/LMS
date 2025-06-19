@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoWeb.Application.Dtos.GradeStudentModel;
-using TodoWeb.Application.Services.Grade;
+using TodoWeb.Service.Services.Grade;
 
 namespace TodoWeb.Controllers
 {

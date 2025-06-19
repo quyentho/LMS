@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using TodoWeb.Application.Dtos.UserModel;
 using TodoWeb.Application.Dtos.UserModel.Contracts;
-using TodoWeb.Application.Services.Users;
-using TodoWeb.Application.Services.Users.FacebookService;
-using TodoWeb.Application.Services.Users.GoogleService;
 using TodoWeb.Domains.Entities;
+using TodoWeb.Service.Services.Users;
+using TodoWeb.Service.Services.Users.FacebookService;
+using TodoWeb.Service.Services.Users.GoogleService;
 
 namespace TodoWeb.Controllers
 {

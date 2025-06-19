@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoWeb.Application.Dtos.ExamSubmissionsModel;
-using TodoWeb.Application.Services.ExamSubmissions;
+using TodoWeb.Service.Services.ExamSubmissions;
 
 namespace TodoWeb.Controllers
 {

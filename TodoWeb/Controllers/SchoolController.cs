@@ -8,9 +8,9 @@ using OfficeOpenXml.Table;
 using RazorLight;
 using TodoWeb.Application.ActionFilters;
 using TodoWeb.Application.Dtos.SchoolModel;
-using TodoWeb.Application.Services.School;
 using TodoWeb.Constants.Enums;
 using TodoWeb.Domains.AppsettingsConfigurations;
+using TodoWeb.Service.Services.School;
 
 namespace TodoWeb.Controllers
 {

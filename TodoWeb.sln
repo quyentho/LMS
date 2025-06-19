@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWeb", "TodoWeb\TodoWeb.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWeb.DataAccess", "TodoWeb.DataAccess\TodoWeb.DataAccess.csproj", "{307887E4-D640-45CE-8577-6DA4B0EBA4E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoWeb.Service", "TodoWeb.Service\TodoWeb.Service.csproj", "{7F3613FD-A8C9-4473-9D88-55FE4D032991}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{307887E4-D640-45CE-8577-6DA4B0EBA4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{307887E4-D640-45CE-8577-6DA4B0EBA4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{307887E4-D640-45CE-8577-6DA4B0EBA4E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3613FD-A8C9-4473-9D88-55FE4D032991}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3613FD-A8C9-4473-9D88-55FE4D032991}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3613FD-A8C9-4473-9D88-55FE4D032991}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3613FD-A8C9-4473-9D88-55FE4D032991}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

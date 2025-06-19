@@ -2,8 +2,8 @@
 using Microsoft.VisualBasic.FileIO;
 using RazorLight;
 using TodoWeb.Application.Dtos.SchoolModel;
-using TodoWeb.Application.Services.School;
 using TodoWeb.Domains.AppsettingsConfigurations;
+using TodoWeb.Service.Services.School;
 
 namespace TodoWeb.Application.BackgroundJobs
 {

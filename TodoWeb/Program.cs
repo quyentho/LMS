@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,25 +9,10 @@ using OfficeOpenXml;
 using Serilog;
 using TodoWeb.Application.ActionFilters;
 using TodoWeb.Application.BackgroundJobs;
-using TodoWeb.Application.Dtos.GuidModel;
-using TodoWeb.Application.MapperProfiles;
 using TodoWeb.Application.Middleware;
-using TodoWeb.Application.Services;
-using TodoWeb.Application.Services.CacheService;
-using TodoWeb.Application.Services.Courses;
-using TodoWeb.Application.Services.CourseStudents;
-using TodoWeb.Application.Services.ExamQuestions;
-using TodoWeb.Application.Services.Exams;
-using TodoWeb.Application.Services.ExamSubmissionDetails;
-using TodoWeb.Application.Services.ExamSubmissions;
-using TodoWeb.Application.Services.Grade;
-using TodoWeb.Application.Services.Questions;
-using TodoWeb.Application.Services.School;
-using TodoWeb.Application.Services.Students;
-using TodoWeb.Application.Services.Users;
 using TodoWeb.Domains.AppsettingsConfigurations;
+using TodoWeb.Extensions;
 using TodoWeb.Infrastructures;
-using TodoWeb.Infrastructures.Extensions;
 //file program la file khi project build ra chay dau tien
 var builder = WebApplication.CreateBuilder(args);
 

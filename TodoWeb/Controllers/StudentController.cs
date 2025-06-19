@@ -4,8 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using TodoWeb.Application.ActionFilters;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Application.Dtos.StudentModel;
-using TodoWeb.Application.Services.Students;
 using TodoWeb.Domains.Entities;
+using TodoWeb.Service.Services.Students;
 
 namespace TodoWeb.Controllers
 {

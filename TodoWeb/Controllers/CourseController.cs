@@ -2,7 +2,7 @@
 using TodoWeb.Application.ActionFilters;
 using TodoWeb.Application.Dtos.CourseModel;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
-using TodoWeb.Application.Services.Courses;
+using TodoWeb.Service.Services.Courses;
 
 namespace TodoWeb.Controllers
 {

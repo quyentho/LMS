@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
-using TodoWeb.Application.Services.CacheService;
 
 namespace TodoWeb.Application.ActionFilters
 {

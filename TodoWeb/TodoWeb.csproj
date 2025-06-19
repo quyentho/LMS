@@ -42,13 +42,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TodoWeb.DataAccess\TodoWeb.DataAccess.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Template\SchoolReport.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TodoWeb.Service\TodoWeb.Service.csproj" />
   </ItemGroup>
 
 </Project>

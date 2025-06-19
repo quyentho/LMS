@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TodoWeb.Application.Dtos.GuidModel;
 using TodoWeb.Application.Dtos.ToDoModel;
-using TodoWeb.Application.Services;
-using TodoWeb.Application.Services.Students;
-using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
+using TodoWeb.Service.Services;
 
 namespace TodoWeb.Controllers
 {
@@ -15,19 +12,16 @@ namespace TodoWeb.Controllers
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly IToDoService _todoService;
-        private readonly IGuidGenerator _guidGenerator;
         private readonly ISingletonGenerator _singletonGenerator;
         private readonly GuidData _guidData;
         public ToDoController(
             IApplicationDbContext dbContext,//Tk dbcontext lúc này sẽ tự new constructer của applicationdbcontext (do đã register đã program nên .net sẽ tự hiểu)
             IToDoService todoService,
-            IGuidGenerator guidGenerator,
             ISingletonGenerator singletonGenerator,
             GuidData guidData) 
         {
             _dbContext = dbContext;
             _todoService = todoService;
-            _guidGenerator = guidGenerator;
             _singletonGenerator = singletonGenerator;
             _guidData = guidData;
         }
@@ -35,7 +29,6 @@ namespace TodoWeb.Controllers
         [HttpGet("guid")] //Attribute de declare method nay la mot http method get
         public Guid[] GetGuid()
         {
-            _guidData.guidGenerator = _guidGenerator;   
             return
                 new Guid[]
                 {
