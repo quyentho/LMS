@@ -30,7 +30,8 @@ namespace TodoWeb.Infrastructures
 
         public DbSet<ModifyLoggingInterceptor> CreateUpdateLoggingInterceptors;
         //constructer
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options){ 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
         }
         
 

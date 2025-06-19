@@ -1,7 +1,4 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Microsoft.AspNetCore.Mvc;
-
-namespace TodoWeb.Application.Services.CacheService
+﻿namespace TodoWeb.Application.Services.CacheService
 {
     public class CacheService : ICacheService
     {
