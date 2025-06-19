@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures.DatabaseMapping;
@@ -38,10 +37,8 @@ namespace TodoWeb.Infrastructures
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.UseSqlServer("Server=localhost;Database=ToDoApp;User Id=sa;Password=StrongPassword123!;TrustServerCertificate=True;");
+            //optionsBuilder.UseSqlServer("Server=localhost;Database=ToDoApp;User Id=sa;Password=StrongPassword123!;TrustServerCertificate=True;");
             optionsBuilder.AddInterceptors(new SqlQueryLoggingInterceptor(), new AuditLoggingInterceptor(), new ModifyLoggingInterceptor());//add theo thứ tự nào thì code mình sẽ chạy theo thứ tự như thế đấy
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

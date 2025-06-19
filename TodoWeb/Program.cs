@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
@@ -77,7 +78,12 @@ builder.Services.AddSwaggerGen(option =>
         { securityScheme, new string[] { } }
     });
 });
-builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>();//register dependencies injection, nó gồm có một interface hoặc abstract class, một class implement, 
+builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+//register dependencies injection, nó gồm có một interface hoặc abstract class, một class implement, 
 //và chúng ta register nó trong một DI collection
 //Khi app được start lên thì cái app sẽ đi collect-gom tất cả các dependencies injection đã được register vào trong cái DI Collection 
 //Khi cần dùng thì nó sẽ tự NEW cho mình
@@ -192,7 +198,7 @@ builder.Host.UseSerilog();
 
 ExcelPackage.License.SetNonCommercialPersonal("Thuan");
 
-builder.Services.AddHangfire(x => x.UseSqlServerStorage("Server=localhost;Database=ToDoApp;User Id=sa;Password=StrongPassword123!;TrustServerCertificate=True;"));
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHangfireServer();
 
 //DI Containers, IServiceProvider
