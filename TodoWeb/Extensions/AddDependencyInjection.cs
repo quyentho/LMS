@@ -1,7 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using TodoWeb.Application.Dtos.GuidModel;
-using TodoWeb.Application.MapperProfiles;
-using TodoWeb.Application.Middleware;
 using TodoWeb.Service.Services;
 using TodoWeb.Service.Services.CacheService;
 using TodoWeb.Service.Services.ExamSubmissions;
@@ -17,6 +15,8 @@ using TodoWeb.Service.Services.Grade;
 using TodoWeb.Service.Services.ExamQuestions;
 using TodoWeb.Service.Services.Users.FacebookService;
 using TodoWeb.Service.Services.Users.GoogleService;
+using TodoWeb.MapperProfiles;
+using TodoWeb.Middleware;
 
 namespace TodoWeb.Extensions
 {

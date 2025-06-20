@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace TodoWeb.Application.Middleware
+namespace TodoWeb.Middleware
 {
     public class RevokeCheckMiddleware : IMiddleware
     {

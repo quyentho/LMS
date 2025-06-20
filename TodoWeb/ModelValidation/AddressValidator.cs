@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TodoWeb.Application.Dtos.StudentModel;
 
-namespace TodoWeb.Application.ModelValidation
+namespace TodoWeb.ModelValidation
 {
     public class AddressValidator : AbstractValidator<Address>
     {

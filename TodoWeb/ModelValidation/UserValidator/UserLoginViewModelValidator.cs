@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TodoWeb.Application.Dtos.UserModel;
 
-namespace TodoWeb.Application.ModelValidation.UserValidator
+namespace TodoWeb.ModelValidation.UserValidator
 {
     public class UserLoginViewModelValidator : AbstractValidator<UserLoginViewModel>
     {

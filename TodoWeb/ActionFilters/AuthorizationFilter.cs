@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using TodoWeb.Constants.Enums;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace TodoWeb.Application.ActionFilters
+namespace TodoWeb.ActionFilters
 {
     public class AuthorizationFilter : IAuthorizationFilter
     {

@@ -7,12 +7,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
 using Serilog;
-using TodoWeb.Application.ActionFilters;
-using TodoWeb.Application.BackgroundJobs;
-using TodoWeb.Application.Middleware;
+using TodoWeb.ActionFilters;
+using TodoWeb.BackgroundJobs;
 using TodoWeb.Domains.AppsettingsConfigurations;
 using TodoWeb.Extensions;
 using TodoWeb.Infrastructures;
+using TodoWeb.Middleware;
 //file program la file khi project build ra chay dau tien
 var builder = WebApplication.CreateBuilder(args);
 

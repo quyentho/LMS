@@ -1,5 +1,4 @@
-﻿
-namespace TodoWeb.Application.Middleware
+﻿namespace TodoWeb.Middleware
 {
     //trong 30s hệ thống chỉ cho phép 100 request
     public class RateLimitMiddleware : IMiddleware

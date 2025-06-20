@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TodoWeb.Application.ActionFilters
+namespace TodoWeb.ActionFilters
 {
     public class TestFilter : IActionFilter, IResultFilter
     {

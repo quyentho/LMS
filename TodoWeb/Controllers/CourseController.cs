@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TodoWeb.Application.ActionFilters;
+using TodoWeb.ActionFilters;
 using TodoWeb.Application.Dtos.CourseModel;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Service.Services.Courses;

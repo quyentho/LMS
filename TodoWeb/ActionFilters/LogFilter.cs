@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TodoWeb.Application.ActionFilters
+namespace TodoWeb.ActionFilters
 {
     public class LogFilter : IExceptionFilter
     {

@@ -2,7 +2,7 @@
 using TodoWeb.Application.Dtos.ExamSubmissionsModel;
 using TodoWeb.Domains.Entities;
 
-namespace TodoWeb.Application.MapperProfiles
+namespace TodoWeb.MapperProfiles
 {
     public class ExamSubmissionProfile : Profile
     {

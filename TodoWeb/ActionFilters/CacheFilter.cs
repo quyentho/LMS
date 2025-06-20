@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace TodoWeb.Application.ActionFilters
+namespace TodoWeb.ActionFilters
 {
     public class CacheFilter : ActionFilterAttribute
     {

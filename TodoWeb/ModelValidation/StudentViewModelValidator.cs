@@ -2,7 +2,7 @@
 using TodoWeb.Application.Dtos.StudentModel;
 using TodoWeb.Infrastructures;
 
-namespace TodoWeb.Application.ModelValidation
+namespace TodoWeb.ModelValidation
 {
     public class StudentViewModelValidator : AbstractValidator<StudentViewModel>
     {

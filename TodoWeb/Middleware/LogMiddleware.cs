@@ -1,5 +1,4 @@
-﻿
-namespace TodoWeb.Application.Middleware
+﻿namespace TodoWeb.Middleware
 {
     //rate limitting
     //200 request / s

@@ -2,7 +2,7 @@
 using TodoWeb.Application.Dtos.UserModel;
 using TodoWeb.Domains.Entities;
 
-namespace TodoWeb.Application.MapperProfiles
+namespace TodoWeb.MapperProfiles
 {
     public class UserProfile : Profile
     {

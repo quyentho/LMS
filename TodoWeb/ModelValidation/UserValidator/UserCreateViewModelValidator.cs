@@ -3,7 +3,7 @@ using TodoWeb.Application.Dtos.UserModel;
 using TodoWeb.Constants.Enums;
 using TodoWeb.Infrastructures;
 
-namespace TodoWeb.Application.ModelValidation.UserValidator
+namespace TodoWeb.ModelValidation.UserValidator
 {
     public class UserCreateViewModelValidator : AbstractValidator<UserCreateViewModel>
     {

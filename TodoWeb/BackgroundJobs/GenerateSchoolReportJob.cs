@@ -5,7 +5,7 @@ using TodoWeb.Application.Dtos.SchoolModel;
 using TodoWeb.Domains.AppsettingsConfigurations;
 using TodoWeb.Service.Services.School;
 
-namespace TodoWeb.Application.BackgroundJobs
+namespace TodoWeb.BackgroundJobs
 {
     public class GenerateSchoolReportJob
     {
