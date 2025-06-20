@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class Exam : ICreate, IUpdate, IDelete
+    public class Exam : IBaseEntity, ICreate, IUpdate, IDelete
     {
         public int Id { get; set; }
         public int CourseId { get; set; }

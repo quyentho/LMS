@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class School : IDelete
+    public class School : IBaseEntity, IDelete
     {
         public int Id { get; set; }
         public string Name { get; set; }

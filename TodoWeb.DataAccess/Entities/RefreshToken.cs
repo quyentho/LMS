@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class RefreshToken
+    public class RefreshToken : IBaseEntity
     {
         [Key]
         public int Id { get; set; }

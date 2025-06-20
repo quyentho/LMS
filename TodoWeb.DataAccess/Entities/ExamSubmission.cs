@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class ExamSubmission: ICreate, IUpdate
+    public class ExamSubmission : IBaseEntity, ICreate, IUpdate
     {
         public int Id { get; set; }
 
@@ -23,6 +23,6 @@ namespace TodoWeb.Domains.Entities
 
         // Navigation property cho chi tiết bài làm
         public ICollection<ExamSubmissionDetail> ExamSubmissionDetails { get; set; }
-        
-    }   
+
+    }
 }

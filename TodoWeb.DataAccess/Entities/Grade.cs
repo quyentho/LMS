@@ -2,14 +2,14 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class Grade
+    public class Grade : IBaseEntity
     {
         public int Id { get; set; }
         public int CourseStudentId { get; set; }
         public decimal? AssignmentScore { get; set; }
         public decimal? PracticalScore { get; set; }
         public decimal? FinalScore { get; set; }
-        
+
         public virtual CourseStudent CourseStudent { get; set; }
 
     }

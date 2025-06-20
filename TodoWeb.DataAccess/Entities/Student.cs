@@ -5,12 +5,12 @@ using TodoWeb.Constants.Enums;
 namespace TodoWeb.Domains.Entities
 {
     [Table("Students")]
-    public class Student : IDelete
+    public class Student : IBaseEntity, IDelete
     {
         [Key]//define primary key cua table, identity (ko the dinh nghia id)
         [DatabaseGenerated(DatabaseGeneratedOption.None)]//none có nghĩa là khóa chính dễ dãi, cho làm mọi thứ, có thể chỉnh id
         public int Id { get; set; }
-        
+
         [MaxLength(255)]//chieu dai toi da 255
         public string? FirstName { get; set; }//? giup co the null
         //[Column("Surname")]

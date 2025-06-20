@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class ExamSubmissionDetail
+    public class ExamSubmissionDetail : IBaseEntity
     {
         public int Id { get; set; }
 

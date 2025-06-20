@@ -1,6 +1,6 @@
 ﻿namespace TodoWeb.Domains.Entities
 {
-    public class CourseStudent 
+    public class CourseStudent : IBaseEntity
     {
         public int Id { get; set; }
         public int CourseId { get; set; }

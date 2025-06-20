@@ -1,6 +1,6 @@
 ﻿namespace TodoWeb.Domains.Entities
 {
-    public class ExamQuestion
+    public class ExamQuestion : IBaseEntity
     {
         //liên kết  nhiều nhiều giữa Exam và Question
         public int Id { get; set; }

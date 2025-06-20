@@ -1,6 +1,6 @@
 ﻿namespace TodoWeb.Domains.Entities
 {
-    public class AuditLog
+    public class AuditLog : IBaseEntity
     {
         public int Id { get; set; }
         public string EntityName { get; set; }

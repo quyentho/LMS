@@ -17,17 +17,21 @@ using TodoWeb.Service.Services.Users.FacebookService;
 using TodoWeb.Service.Services.Users.GoogleService;
 using TodoWeb.MapperProfiles;
 using TodoWeb.Middleware;
+using TodoWeb.Infrastructures.Repositories;
 
 namespace TodoWeb.Extensions
 {
     public static class AddDependencyInjection
     {
-
         public static void AddService(this IServiceCollection serviceCollection)
         {
+            // Repository Pattern Registration
+            serviceCollection.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();            // Existing service registrations
             serviceCollection.AddScoped<IToDoService, ToDoService>();
             serviceCollection.AddSingleton<ISingletonGenerator, SingltonGenerator>();
             serviceCollection.AddScoped<IStudentService, StudentService>();
+            serviceCollection.AddScoped<IStudentServiceWithRepository, StudentServiceWithRepository>();
             serviceCollection.AddScoped<ISchoolService, SchoolService>();
             serviceCollection.AddSingleton<GuidData>();
             serviceCollection.AddScoped<ICourseService, CourseService>();
@@ -38,13 +42,13 @@ namespace TodoWeb.Extensions
             serviceCollection.AddScoped<IExamQuestionService, ExamQuestionService>();
             serviceCollection.AddScoped<IExamSubmissionDetailsService, ExamSubmissionDetailsService>();
             serviceCollection.AddScoped<IExamSubbmissionService, ExamSubbmissionService>();
-            serviceCollection.AddScoped<IUserService, UserService>();
-            serviceCollection.AddAutoMapper(typeof(ToDoProfile));
+            serviceCollection.AddScoped<IUserService, UserService>(); serviceCollection.AddAutoMapper(typeof(ToDoProfile));
             serviceCollection.AddAutoMapper(typeof(ExamProfile));
             serviceCollection.AddAutoMapper(typeof(ExamQuestionProfile));
             serviceCollection.AddAutoMapper(typeof(ExamSubmissionProfile));
             serviceCollection.AddAutoMapper(typeof(ExamSubmissionDetailsProfile));
             serviceCollection.AddAutoMapper(typeof(UserProfile));
+            serviceCollection.AddAutoMapper(typeof(StudentProfile));
             serviceCollection.AddSingleton<LogMiddleware>();
             serviceCollection.AddSingleton<RateLimitMiddleware>();
             serviceCollection.AddSingleton<RevokeCheckMiddleware>();

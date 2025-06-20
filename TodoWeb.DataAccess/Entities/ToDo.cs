@@ -3,7 +3,7 @@
 namespace TodoWeb.Domains.Entities
 {
     //cau truc cua mot dong trong table ToDos
-    public class ToDo
+    public class ToDo : IBaseEntity
     {
         [Key]//Data Annotations
         public int Id { get; set; }

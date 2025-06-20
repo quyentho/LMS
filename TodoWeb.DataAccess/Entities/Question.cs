@@ -2,9 +2,9 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class Question : ICreate, IUpdate, IDelete
+    public class Question : IBaseEntity, ICreate, IUpdate, IDelete
     {
-        public int Id { get; set;}
+        public int Id { get; set; }
         public string QuestionText { get; set; }
         public string OptionA { get; set; }
         public string OptionB { get; set; }
@@ -22,6 +22,6 @@ namespace TodoWeb.Domains.Entities
 
         // Navigation properties
         public ICollection<ExamQuestion> ExamQuestions { get; set; }
-        
+
     }
 }

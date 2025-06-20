@@ -2,7 +2,7 @@
 
 namespace TodoWeb.Domains.Entities
 {
-    public class User
+    public class User : IBaseEntity
     {
         public int Id { get; set; }
         public string EmailAddress { get; set; }
