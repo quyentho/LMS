@@ -9,18 +9,18 @@ using TodoWeb.Infrastructures;
 
 #nullable disable
 
-namespace TodoWeb.Migrations
+namespace TodoWeb.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250509124638_addUserTable")]
-    partial class addUserTable
+    [Migration("20250620135835_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -351,6 +351,34 @@ namespace TodoWeb.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("TodoWeb.Domains.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("TodoWeb.Domains.Entities.School", b =>
                 {
                     b.Property<int>("Id")
@@ -461,18 +489,25 @@ namespace TodoWeb.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Salting")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -577,6 +612,17 @@ namespace TodoWeb.Migrations
                     b.Navigation("CourseStudent");
                 });
 
+            modelBuilder.Entity("TodoWeb.Domains.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("TodoWeb.Domains.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TodoWeb.Domains.Entities.Student", b =>
                 {
                     b.HasOne("TodoWeb.Domains.Entities.School", "School")
@@ -626,6 +672,11 @@ namespace TodoWeb.Migrations
             modelBuilder.Entity("TodoWeb.Domains.Entities.Student", b =>
                 {
                     b.Navigation("CourseStudent");
+                });
+
+            modelBuilder.Entity("TodoWeb.Domains.Entities.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

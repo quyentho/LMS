@@ -2,7 +2,6 @@
 using TodoWeb.Application.Dtos.ExamQuestionModel;
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
-using TodoWeb.Migrations;
 
 namespace TodoWeb.Application.Services.ExamQuestions
 {

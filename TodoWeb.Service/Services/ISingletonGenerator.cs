@@ -9,11 +9,12 @@
     {
 
         private readonly IServiceProvider _serviceProvider;
+        private readonly IGuidGenerator guidGenerator;
 
-
-        public SingltonGenerator(IServiceProvider serviceProvider)
+        public SingltonGenerator(IServiceProvider serviceProvider, IGuidGenerator guidGenerator)
         {
             _serviceProvider = serviceProvider;
+            this.guidGenerator = guidGenerator;
         }
 
         public Guid Generate()

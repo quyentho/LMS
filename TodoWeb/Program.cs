@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfficeOpenXml;
@@ -77,7 +78,15 @@ builder.Services.AddSwaggerGen(option =>
         { securityScheme, new string[] { } }
     });
 });
-builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>();//register dependencies injection, nó gồm có một interface hoặc abstract class, một class implement, 
+
+string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
+
+//register dependencies injection, nó gồm có một interface hoặc abstract class, một class implement, 
 //và chúng ta register nó trong một DI collection
 //Khi app được start lên thì cái app sẽ đi collect-gom tất cả các dependencies injection đã được register vào trong cái DI Collection 
 //Khi cần dùng thì nó sẽ tự NEW cho mình
@@ -185,14 +194,14 @@ builder.Services.AddAuthentication(options =>
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
-    .WriteTo.File("C:\\Users\\DELL\\OneDrive\\Desktop\\Logs\\log.txt",
+    .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"),
         rollingInterval: RollingInterval.Minute)
     .CreateLogger();
 builder.Host.UseSerilog();
 
 ExcelPackage.License.SetNonCommercialPersonal("Thuan");
 
-builder.Services.AddHangfire(x => x.UseSqlServerStorage("Server=DESKTOP-TUDP88B\\SQLEXPRESS;Database=ToDoApp;Trusted_Connection=True;TrustServerCertificate=True"));
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
 
 //DI Containers, IServiceProvider

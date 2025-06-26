@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using TodoWeb.Domains.Entities;
-using System.Security.AccessControl;
 using TodoWeb.Constants.Enums;
-using Castle.Components.DictionaryAdapter.Xml;
 
 namespace TodoWeb.Infrastructures.Interceptor
 {
