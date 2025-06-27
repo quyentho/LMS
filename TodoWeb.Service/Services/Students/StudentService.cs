@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Application.Dtos.StudentModel;
@@ -12,90 +11,35 @@ using TodoWeb.Infrastructures;
 
 namespace TodoWeb.Service.Services.Students
 {
-
-
     public class StudentService : IStudentService
     {
-        private const string STUDENT_KEY = "StudentKey";
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentRepository _cachedStudentRepository;
 
-        public StudentService(IApplicationDbContext context, IMapper mapper, IMemoryCache cache, IStudentRepository studentRepository)
+        public StudentService(IApplicationDbContext context, IMapper mapper, IStudentRepository cachedStudentRepository)
         {
             _context = context;
             _mapper = mapper;
-            _cache = cache;
-            this._studentRepository = studentRepository;
+            _cachedStudentRepository = cachedStudentRepository;
         }
+
         public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync(int? studentId)
         {
-            var students = await _studentRepository.GetStudentAsync(studentId, s => s.School);
+            var students = await _cachedStudentRepository.GetStudentsAsync(studentId, s => s.School);
 
             var result = _mapper.Map<List<StudentViewModel>>(students).ToList();
             return result;
         }
 
-        public IEnumerable<StudentViewModel> GetStudents()
+        public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync()
         {
-            var data = _cache.GetOrCreate(STUDENT_KEY, entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromSeconds(30);//sliding cập nhật lại thời gian ở mỗi lần request
-                return GetAllStudent();
-            });
-            return data;
-        }
-
-        private IEnumerable<StudentViewModel> GetAllStudent()
-        {
-            var query = _context.Students
-                .Where(student => student.Status != Constants.Enums.Status.Deleted)
-                .Include(student => student.School)
-                .AsQueryable();
-            var result = _mapper.ProjectTo<StudentViewModel>(query).ToList();
+            var students = await _cachedStudentRepository.GetAllStudentsWithCacheAsync(student => student.School);
+            var result = _mapper.Map<List<StudentViewModel>>(students);
             return result;
         }
 
-
-        //IQueryable cos khar nang build leen 1 cau query cos kha nang mo rong(extension)
-        //public IEnumerable<StudentViewModel> GetStudents(int? schoolId)
-        //{
-        //    //query = slect * from student 
-        //    //join school on student.sId = School.id
-        //    var query = _context.Students
-        //        .Where(student => student.Status != Constants.Enums.Status.Deleted)
-        //        .Include(student => student.School)//icludeQueryAble
-        //        .AsQueryable();//build leen 1 cau query
-
-        //    if (schoolId.HasValue)
-        //    {
-        //        //query = slect * from student 
-        //        //join school on student.sId = School.id
-        //        //Where(x => x.S.Id == schoolId)
-        //        query = query.Where(x => x.School.Id == schoolId);//add theem ddk 
-        //    }
-        //    //Select 
-        //    //Id = x.Id,
-        //    //FullName = x.FirstName + x.LastName,
-        //    //SchoolName = x.School.Name,
-        //    //from student 
-        //    //join school on student.schoolId = School.id
-        //    //Where(x => x.SId == schoolId) (depend if schoolId is not null)
-        //    var result = _mapper.ProjectTo<StudentViewModel>(query).ToList();
-        //    return result;
-
-        //    //return query.Select(x => new StudentViewModel
-        //    //{
-        //    //    Id = x.Id,
-        //    //    FullName = x.FirstName + " " + x.LastName,
-        //    //    Age = x.Age,
-        //    //    SchoolName = x.School.Name,
-        //    //}).ToList();//khi minhf chaams to list thi entity framework moi excute cau query 
-        //    //chua to list thif se build tren memory
-        //}
-
-        public StudentPagingViewModel GetStudents(int? schoolId, string? sortBy, bool isDescending, int? pageSize, int? pageIndex)
+        public async Task<StudentPagingViewModel> GetPagedStudentsAsync(int? schoolId, string? sortBy, bool isDescending, int? pageSize, int? pageIndex)
         {
             if (pageSize <= 0 || pageIndex <= 0)
             {
@@ -105,63 +49,24 @@ namespace TodoWeb.Service.Services.Students
                     TotalPages = 0
                 };
             }
-            var query = _context.Students
-                .Where(student => student.Status != Constants.Enums.Status.Deleted)
-                .Include(student => student.School)
-                .AsQueryable();
 
-            if (schoolId.HasValue)
-            {
-                query = query.Where(x => x.School.Id == schoolId);//add theem ddk 
-            }
+            var students = await _cachedStudentRepository.GetPagedStudentsAsync(schoolId, sortBy, isDescending, pageSize, pageIndex);
 
-
-            // Map sortBy string into a list of Expression selectors  
-            Expression<Func<Student, object>>[] sortSelectors;
-            if (sortBy.IsNullOrEmpty())
-            {
-                sortSelectors = [];
-            }else
-            {
-                sortSelectors = sortBy.ToLower()
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(f => (Expression<Func<Student, object>>)(f.Trim() switch
-                    {
-                        "id" => student => student.Id,
-                        "age" => student => student.Age,
-                        "fullname" => student => student.FirstName + " " + student.LastName,
-                        "schoolname" => student => student.School.Name,
-                        "balance" => student => student.Balance,
-                        _ => student => student.Id
-                    })).ToArray();
-            }
-
-            if(pageSize.HasValue && pageIndex == null)
-            {
-                pageIndex = 1;
-            }
-            if (pageIndex.HasValue && pageSize == null)
-            {
-                pageSize = 5;
-            }
-
-            query = query
-                .ApplySort(isDescending, sortSelectors)
-                .ApplyPaging(pageIndex, pageSize)
-                .AsQueryable();
             int totalPage;
-            if(pageSize == null)
+
+            if (pageSize == null)
             {
                 totalPage = 1;
-            }else
+            }
+            else
             {
-                var numberOfStudents = _context.Students.Count();
+                var numberOfStudents = students.Count;
                 totalPage = (int)Math.Ceiling((double)numberOfStudents / (int)pageSize);
             }
                 
             var data = new StudentPagingViewModel
             {
-                Students = _mapper.ProjectTo<StudentViewModel>(query).ToList(),
+                Students = _mapper.Map<List<StudentViewModel>>(students),
                 TotalPages = totalPage
             };
             return data;
@@ -227,9 +132,11 @@ namespace TodoWeb.Service.Services.Students
             };
             _context.Students.Add(data);
             _context.SaveChanges();
-            _cache.Remove(STUDENT_KEY);
+            
+            // Invalidate cache when data changes
+            _cachedStudentRepository.InvalidateCache();
+            
             return data.Id;
-
         }
 
         public int Put(StudentViewModel student)
@@ -254,6 +161,10 @@ namespace TodoWeb.Service.Services.Students
             //data.Balance = student.Balance;
             _mapper.Map(student, data);
             _context.SaveChanges();
+            
+            // Invalidate cache when data changes
+            _cachedStudentRepository.InvalidateCache();
+            
             return data.Id;
         }
 
@@ -266,6 +177,10 @@ namespace TodoWeb.Service.Services.Students
             }
             _context.Students.Remove(data);
             _context.SaveChanges();
+            
+            // Invalidate cache when data changes
+            _cachedStudentRepository.InvalidateCache();
+            
             return data.Id;
         }
 
@@ -285,18 +200,6 @@ namespace TodoWeb.Service.Services.Students
             //projectto dùng khi muốn map một câu query
             //còn map thì dùng khi muốn map một object
             return _mapper.Map<StudentCourseDetailViewModel>(student);
-
-            //return new StudentCourseDetailViewModel
-            //{
-            //    StudentId = student.Id,
-            //    StudentName = student.FirstName + " " + student.LastName,
-            //    Courses = student.CourseStudent.Select(cs => new CourseViewModel
-            //    {
-            //        CourseId = cs.CourseId,
-            //        CourseName = cs.Course.Name
-            //    }).ToList()
-            //};
         }
-
     }
 }

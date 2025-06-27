@@ -37,7 +37,7 @@ namespace TodoWeb.Controllers
         [HttpGet("/AllStudents")]
         public async Task<IActionResult> GetAllStudentsAsync()
         {
-            var result = await _studentService.GetStudentsAsync(null);
+            var result = await _studentService.GetStudentsAsync();
             if (result.IsNullOrEmpty())
             {
                 return NotFound();
@@ -49,14 +49,14 @@ namespace TodoWeb.Controllers
         }
 
         [HttpGet("{studentId}")]
-        public IActionResult GetStudent(int studentId)
+        public async Task<IActionResult> GetStudent(int studentId)
         {
-            var result = _studentService.GetStudentsAsync(studentId);
+            var result = await _studentService.GetStudentsAsync(studentId);
             return Ok(result);
         }
 
         [HttpGet("/Students")]
-        public IActionResult GetStudents(
+        public async Task<IActionResult> GetStudents(
             [FromQuery] int? schoolId,
             [FromQuery] string? sortBy,
             [FromQuery] bool desc,
@@ -64,7 +64,7 @@ namespace TodoWeb.Controllers
             [FromQuery] int? pageIndex)
             
         {
-            var result = _studentService.GetStudents(schoolId, sortBy, desc, pageSize, pageIndex);
+            var result = await _studentService.GetPagedStudentsAsync(schoolId, sortBy, desc, pageSize, pageIndex);
             if (result.TotalPages == 0 || result.Students.IsNullOrEmpty())
             {
                 return NotFound();

@@ -27,9 +27,13 @@ namespace TodoWeb.Extensions
 
         public static void AddService(this IServiceCollection serviceCollection)
         {
+            // Register the base repository
             serviceCollection.AddScoped<IStudentRepository, StudentRepository>();
+            
+            // Register the cached repository decorator
+            serviceCollection.AddScoped<ICachedStudentRepository, CachedStudentRepository>();
+            
             serviceCollection.AddScoped<ICourseRepository, CourseRepository>();
-
 
             serviceCollection.AddScoped<IToDoService, ToDoService>();
             serviceCollection.AddSingleton<ISingletonGenerator, SingltonGenerator>();
@@ -45,6 +49,7 @@ namespace TodoWeb.Extensions
             serviceCollection.AddScoped<IExamSubmissionDetailsService, ExamSubmissionDetailsService>();
             serviceCollection.AddScoped<IExamSubbmissionService, ExamSubbmissionService>();
             serviceCollection.AddScoped<IUserService, UserService>();
+            serviceCollection.AddAutoMapper(typeof(StudentProfile));
             serviceCollection.AddAutoMapper(typeof(CourseProfile));
             serviceCollection.AddAutoMapper(typeof(ToDoProfile));
             serviceCollection.AddAutoMapper(typeof(ExamProfile));
