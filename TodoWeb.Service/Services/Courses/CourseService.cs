@@ -8,16 +8,11 @@ namespace TodoWeb.Service.Services.Courses
 {
     public class CourseService : ICourseService
     {
-        //thêm thuộc tính IApplicationDbContext vào class, và khỏi tạo giá trị thông qua constructer để 
-        //từ đó class có phiên làm việc với cơ sở dữ liệu cho riêng mình
-
-        private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICourseRepository _courseRepository;
 
-        public CourseService(IApplicationDbContext context, IMapper mapper, ICourseRepository courseRepository)
+        public CourseService(IMapper mapper, ICourseRepository courseRepository)
         {
-            _context = context;
             _mapper = mapper;
             _courseRepository = courseRepository;
         }
@@ -56,6 +51,20 @@ namespace TodoWeb.Service.Services.Courses
             var id = await _courseRepository.UpdateCourseAsync(oldCourse);
 
             return id;
+        }
+
+        public async Task<int> SoftDeleteAsync(int courseId)
+        {
+            var oldCourse = await _courseRepository.GetCourseByIdAsync(courseId);
+
+            if (oldCourse == null || oldCourse.Status == Constants.Enums.Status.Deleted)
+            {
+                return -1;
+            }
+
+            oldCourse.Status = Constants.Enums.Status.Deleted;
+
+            return await _courseRepository.UpdateCourseAsync(oldCourse);
         }
 
         public async Task<int> DeleteAsync(int courseId)

@@ -10,5 +10,6 @@ namespace TodoWeb.Service.Services.Courses
         public Task<int> Post(PostCourseViewModel course);
         public Task<int> PutAsync(CourseViewModel course);
         public Task<int> DeleteAsync(int courseId);
+        Task<int> SoftDeleteAsync(int courseId);
     }
 }
