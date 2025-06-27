@@ -5,7 +5,7 @@ namespace TodoWeb.Service.Services.Courses
 {
     public interface ICourseService
     {
-        public IEnumerable<CourseViewModel> GetCourses(int? courseId);
+        public Task<IEnumerable<CourseViewModel>> GetCoursesAsync(int? courseId);
 
         public Task<int> Post(PostCourseViewModel course);
         public Task<int> PutAsync(CourseViewModel course);

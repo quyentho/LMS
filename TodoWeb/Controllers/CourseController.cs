@@ -40,14 +40,14 @@ namespace TodoWeb.Controllers
                 _logger.LogError($"Error: Id can't less 0");
                 throw new Exception("Id can't less 0");
             }
-            return Ok(_courseService.GetCourses(id));
+            return Ok(_courseService.GetCoursesAsync(id));
         }
 
 
         [HttpGet]
-        public IEnumerable<CourseViewModel> GetAllCourse()//int? courseId//có giá trị hoặc là null
+        public async Task<IEnumerable<CourseViewModel>> GetAllCourseAsync()//int? courseId//có giá trị hoặc là null
         {
-            return _courseService.GetCourses(null);
+            return await _courseService.GetCoursesAsync(null);
         }
         
         [HttpGet("Detail/{id}")]

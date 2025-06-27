@@ -6,7 +6,7 @@ namespace TodoWeb.DataAccess.Repositories.CourseRepo
     {
         Task<int> AddCourseAsync(Course course);
         Task<Course?> GetCourseByNameAsync(string courseName);
-        Task<IEnumerable<Course>> GetCourses(int? courseId);
+        Task<IEnumerable<Course>> GetCoursesAsync(int? courseId);
         
         Task<Course?> GetCourseByIdAsync(int courseId);
         Task<int> UpdateCourseAsync(Course course);

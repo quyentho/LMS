@@ -13,7 +13,7 @@ namespace TodoWeb.DataAccess.Repositories.CourseRepo
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Course>> GetCourses(int? courseId)
+        public async Task<IEnumerable<Course>> GetCoursesAsync(int? courseId)
         {
             var query = _dbContext.Course.AsQueryable();
             if (courseId.HasValue)

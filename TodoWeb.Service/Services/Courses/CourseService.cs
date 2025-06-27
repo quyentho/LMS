@@ -16,9 +16,9 @@ namespace TodoWeb.Service.Services.Courses
             _mapper = mapper;
             _courseRepository = courseRepository;
         }
-        public IEnumerable<CourseViewModel> GetCourses(int? courseId)
+        public async Task<IEnumerable<CourseViewModel>> GetCoursesAsync(int? courseId)
         {
-            var courses = _courseRepository.GetCourses(courseId);
+            var courses = await _courseRepository.GetCoursesAsync(courseId);
 
             var result = _mapper.Map<List<CourseViewModel>>(courses);
 
