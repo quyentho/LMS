@@ -6,9 +6,9 @@ namespace TodoWeb.DataAccess.Repositories.CourseRepo
 {
     public class CourseRepository : ICourseRepository
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
 
-        public CourseRepository(ApplicationDbContext dbContext)
+        public CourseRepository(IApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
