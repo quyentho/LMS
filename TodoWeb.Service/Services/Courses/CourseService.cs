@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using TodoWeb.Application.Dtos.CourseModel;
-using TodoWeb.DataAccess.Repositories;
+using TodoWeb.DataAccess.Repositories.Course;
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
 

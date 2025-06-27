@@ -1,6 +1,6 @@
 ﻿using TodoWeb.Domains.Entities;
 
-namespace TodoWeb.DataAccess.Repositories
+namespace TodoWeb.DataAccess.Repositories.Course
 {
     public interface ICourseRepository
     {
