@@ -2,7 +2,7 @@
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
 
-namespace TodoWeb.DataAccess.Repositories.Course
+namespace TodoWeb.DataAccess.Repositories.CourseRepo
 {
     public class CourseRepository : ICourseRepository
     {
