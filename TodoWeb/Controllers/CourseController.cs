@@ -3,6 +3,7 @@ using TodoWeb.ActionFilters;
 using TodoWeb.Application.Dtos.CourseModel;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Service.Services.Courses;
+using TodoWeb.Service.Services.CourseStudents;
 
 namespace TodoWeb.Controllers
 {
@@ -16,10 +17,12 @@ namespace TodoWeb.Controllers
     {
         //một instance của courseservice
         private readonly ICourseService _courseService;
+        private readonly ICourseStudentService _courseStudentService;
         private readonly ILogger<CourseController> _logger;
-        public CourseController(ICourseService courseService, ILogger<CourseController> logger)
+        public CourseController(ICourseService courseService, ICourseStudentService courseStudentService, ILogger<CourseController> logger)
         {
             _courseService = courseService;
+            this._courseStudentService = courseStudentService;
             _logger = logger;
         }
 
@@ -50,13 +53,13 @@ namespace TodoWeb.Controllers
         [HttpGet("Detail/{id}")]
         public IEnumerable<CourseStudentDetailViewModel> GetCourseDetails(int id)
         {
-            return _courseService.GetCoursesDetail(id);
+            return _courseStudentService.GetCoursesDetail(id);
         }
 
         [HttpGet("Detail")]
         public IEnumerable<CourseStudentDetailViewModel> GetAllCourseDetails()
         {
-            return _courseService.GetCoursesDetail(null);
+            return _courseStudentService.GetCoursesDetail(null);
         }
 
 
@@ -75,15 +78,15 @@ namespace TodoWeb.Controllers
         }
 
         [HttpPut]
-        public int Put(CourseViewModel course)
+        public async Task<int> PutAsync(CourseViewModel course)
         {
-            return _courseService.Put(course);
+            return await _courseService.PutAsync(course);
         }
 
         [HttpDelete]
-        public int Delete(int id)
+        public async Task<int> DeleteAsync(int id)
         {
-            return _courseService.Delete(id);
+            return await _courseService.DeleteAsync(id);
         }
     }
 }
