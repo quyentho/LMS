@@ -39,16 +39,6 @@ namespace TodoWeb.Service.Services.Students
 
         public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync()
         {
-            var data = await _cache.GetOrCreate(STUDENT_KEY, async entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromSeconds(30);//sliding cập nhật lại thời gian ở mỗi lần request
-                return await GetAllStudentAsync();
-            });
-            return data;
-        }
-
-        private async Task<IEnumerable<StudentViewModel>> GetAllStudentAsync()
-        {
             var students = await _studentRepository.GetAllAsync(null, s => s.School);
 
             return _mapper.Map<List<StudentViewModel>>(students);

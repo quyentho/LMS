@@ -49,7 +49,8 @@ namespace TodoWeb.DataAccess.Repositories
         {
             _dbSet.Update(course);
 
-            return await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            return course.Id;
         }
 
         public async Task<int> DeleteAsync(int courseId)

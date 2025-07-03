@@ -19,6 +19,8 @@ using TodoWeb.MapperProfiles;
 using TodoWeb.Middleware;
 using TodoWeb.DataAccess.Repositories;
 using TodoWeb.Domains.Entities;
+using Microsoft.Extensions.Caching.Memory;
+using TodoWeb.Infrastructures;
 
 namespace TodoWeb.Extensions
 {
@@ -28,7 +30,22 @@ namespace TodoWeb.Extensions
         public static void AddService(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<ISchoolRepository, SchoolRepository>();
-            serviceCollection.AddScoped<IGenericRepository<Student>, StudentRepository>();
+            serviceCollection.AddScoped<IGenericRepository<Student>, CachedRepository<Student>>(serviceProvider =>
+            {
+                return new CachedRepository<Student>(
+                    serviceProvider.GetRequiredService<IMemoryCache>(),
+                    ActivatorUtilities.CreateInstance<StudentRepository>(serviceProvider)
+                );
+            });
+
+            serviceCollection.AddScoped<IGenericRepository<Course>, CachedRepository<Course>>(serviceProvider =>
+            {
+                return new CachedRepository<Course>(
+                    serviceProvider.GetRequiredService<IMemoryCache>(),
+                    ActivatorUtilities.CreateInstance<CourseRepository>(serviceProvider)
+                );
+            });
+
             serviceCollection.AddScoped<ICourseRepository, CourseRepository>();
 
             serviceCollection.AddScoped<IToDoService, ToDoService>();
