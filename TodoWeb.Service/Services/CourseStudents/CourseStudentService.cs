@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TodoWeb.Application.Dtos.CourseModel;
+using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Application.Dtos.CourseStudentModel;
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
@@ -15,6 +17,22 @@ namespace TodoWeb.Service.Services.CourseStudents
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public IEnumerable<CourseStudentDetailViewModel> GetCoursesDetail(int? courseId)
+        {
+            var query = _context.Course.AsQueryable();
+            if (courseId.HasValue)
+            {
+                query = query.Where(course => course.Id == courseId);
+                if (query.Count() == 0) return null;
+            }
+
+            query = query.Where(course => course.Status != Constants.Enums.Status.Deleted)
+                .Include(course => course.CourseStudent)
+                .ThenInclude(courseStudent => courseStudent.Student);
+
+            return _mapper.ProjectTo<CourseStudentDetailViewModel>(query);
         }
 
         public int PostCourseStudent(PostCourseStudentViewModel courseStudentViewModel)

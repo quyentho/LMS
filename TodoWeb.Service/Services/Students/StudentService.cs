@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Application.Dtos.StudentModel;
 using TodoWeb.Application.Extensions;
+using TodoWeb.DataAccess.Repositories;
 using TodoWeb.Domains.Entities;
 using TodoWeb.Infrastructures;
 
@@ -19,53 +20,36 @@ namespace TodoWeb.Service.Services.Students
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _cache;
-        public StudentService(IApplicationDbContext context, IMapper mapper, IMemoryCache cache)
+        private readonly IStudentRepository _studentRepository;
+
+        public StudentService(IApplicationDbContext context, IMapper mapper, IMemoryCache cache, IStudentRepository studentRepository)
         {
             _context = context;
             _mapper = mapper;
             _cache = cache;
+            this._studentRepository = studentRepository;
         }
-        public IEnumerable<StudentViewModel> GetStudent(int? studentId)
+        public async Task<IEnumerable<StudentViewModel>> GetStudentAsync(int? studentId)
         {
-            var query = _context.Students
-                .Where(student => student.Status != Constants.Enums.Status.Deleted)
-                .AsQueryable();//build leen 1 cau query
-            if (studentId.HasValue)
-            {
-                query = query.Where(x => x.Id == studentId);//add theem ddk 
-            }
-            query = query.Include(student => student.School);
-            var result = _mapper.ProjectTo<StudentViewModel>(query).ToList();
+            var students = await _studentRepository.GetStudentsAsync(studentId, s => s.School);
+
+            var result = _mapper.Map<List<StudentViewModel>>(students);
             return result;
         }
 
-        public IEnumerable<StudentViewModel> GetStudents()
+        public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync()
         {
-            //var data = _cache.Get<IEnumerable<StudentViewModel>>(STUDENT_KEY);
-            //if (data == null)
-            //{
-            //    data = GetAllStudent();
-            //    var cacheOptions = new MemoryCacheEntryOptions()
-            //        .SetAbsoluteExpiration(TimeSpan.FromSeconds(30));//thoi gian ton tai trong cache
-            //    _cache.Set(STUDENT_KEY, data, cacheOptions);
-            //}
-            //return data;
-            var data = _cache.GetOrCreate(STUDENT_KEY, entry =>
+            var data = await _cache.GetOrCreate(STUDENT_KEY, async entry =>
             {
                 entry.SlidingExpiration = TimeSpan.FromSeconds(30);//sliding cập nhật lại thời gian ở mỗi lần request
-                return GetAllStudent();
+                return await GetAllStudentAsync();
             });
             return data;
         }
 
-        private IEnumerable<StudentViewModel> GetAllStudent()
+        private async Task<IEnumerable<StudentViewModel>> GetAllStudentAsync()
         {
-            var query = _context.Students
-                .Where(student => student.Status != Constants.Enums.Status.Deleted)
-                .Include(student => student.School)
-                .AsQueryable();
-            var result = _mapper.ProjectTo<StudentViewModel>(query).ToList();
-            return result;
+            return await GetStudentAsync(null);
         }
 
 

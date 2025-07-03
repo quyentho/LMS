@@ -17,6 +17,7 @@ using TodoWeb.Service.Services.Users.FacebookService;
 using TodoWeb.Service.Services.Users.GoogleService;
 using TodoWeb.MapperProfiles;
 using TodoWeb.Middleware;
+using TodoWeb.DataAccess.Repositories;
 
 namespace TodoWeb.Extensions
 {
@@ -25,6 +26,8 @@ namespace TodoWeb.Extensions
 
         public static void AddService(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<ICourseRepository, CourseRepository>();
+
             serviceCollection.AddScoped<IToDoService, ToDoService>();
             serviceCollection.AddSingleton<ISingletonGenerator, SingltonGenerator>();
             serviceCollection.AddScoped<IStudentService, StudentService>();

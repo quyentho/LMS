@@ -3,6 +3,7 @@ using TodoWeb.ActionFilters;
 using TodoWeb.Application.Dtos.CourseModel;
 using TodoWeb.Application.Dtos.CourseStudentDetailModel;
 using TodoWeb.Service.Services.Courses;
+using TodoWeb.Service.Services.CourseStudents;
 
 namespace TodoWeb.Controllers
 {
@@ -17,15 +18,18 @@ namespace TodoWeb.Controllers
         //một instance của courseservice
         private readonly ICourseService _courseService;
         private readonly ILogger<CourseController> _logger;
-        public CourseController(ICourseService courseService, ILogger<CourseController> logger)
+        private readonly ICourseStudentService _courseStudentService;
+
+        public CourseController(ICourseService courseService, ILogger<CourseController> logger, ICourseStudentService courseStudentService)
         {
             _courseService = courseService;
             _logger = logger;
+            this._courseStudentService = courseStudentService;
         }
 
         [TypeFilter(typeof(CacheFilter), Arguments = [10])]
         [HttpGet("{id}")]
-        public IActionResult GetCourse(int id)
+        public async Task<IActionResult> GetCourseAsync(int id)
         {
             _logger.LogInformation($"Get Course with id: {id}");
             if(id == 10)
@@ -37,26 +41,35 @@ namespace TodoWeb.Controllers
                 _logger.LogError($"Error: Id can't less 0");
                 throw new Exception("Id can't less 0");
             }
-            return Ok(_courseService.GetCourses(id));
+
+            var course = await _courseService.GetCoursesAsync(id);
+
+            if (course == null || !course.Any())
+            {
+                _logger.LogWarning($"Course with id: {id} not found");
+                return NotFound();
+            }
+
+            return Ok(course.Single());
         }
 
 
         [HttpGet]
-        public IEnumerable<CourseViewModel> GetAllCourse()//int? courseId//có giá trị hoặc là null
+        public async Task<IEnumerable<CourseViewModel>> GetAllCourseAsync()//int? courseId//có giá trị hoặc là null
         {
-            return _courseService.GetCourses(null);
+            return await _courseService.GetCoursesAsync(null);
         }
         
         [HttpGet("Detail/{id}")]
         public IEnumerable<CourseStudentDetailViewModel> GetCourseDetails(int id)
         {
-            return _courseService.GetCoursesDetail(id);
+            return _courseStudentService.GetCoursesDetail(id);
         }
 
         [HttpGet("Detail")]
         public IEnumerable<CourseStudentDetailViewModel> GetAllCourseDetails()
         {
-            return _courseService.GetCoursesDetail(null);
+            return _courseStudentService.GetCoursesDetail(null);
         }
 
 
@@ -75,15 +88,15 @@ namespace TodoWeb.Controllers
         }
 
         [HttpPut]
-        public int Put(CourseViewModel course)
+        public async Task<int> PutAsync(CourseViewModel course)
         {
-            return _courseService.Put(course);
+            return await _courseService.PutAsync(course);
         }
 
         [HttpDelete]
-        public int Delete(int id)
+        public async Task<int> DeleteAsync(int id)
         {
-            return _courseService.Delete(id);
+            return await _courseService.DeleteAsync(id);
         }
     }
 }
