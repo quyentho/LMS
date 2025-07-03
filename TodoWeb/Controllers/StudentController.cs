@@ -88,7 +88,7 @@ namespace TodoWeb.Controllers
             {
                 return BadRequest(ModelState);
             }
-            return Ok(_studentService.Post(student));
+            return Ok(_studentService.PostAsync(student));
         }
         [HttpPut]
         public int Put(StudentViewModel student)

@@ -18,6 +18,7 @@ using TodoWeb.Service.Services.Users.GoogleService;
 using TodoWeb.MapperProfiles;
 using TodoWeb.Middleware;
 using TodoWeb.DataAccess.Repositories;
+using TodoWeb.Domains.Entities;
 
 namespace TodoWeb.Extensions
 {
@@ -26,6 +27,8 @@ namespace TodoWeb.Extensions
 
         public static void AddService(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<ISchoolRepository, SchoolRepository>();
+            serviceCollection.AddScoped<IGenericRepository<Student>, StudentRepository>();
             serviceCollection.AddScoped<ICourseRepository, CourseRepository>();
 
             serviceCollection.AddScoped<IToDoService, ToDoService>();

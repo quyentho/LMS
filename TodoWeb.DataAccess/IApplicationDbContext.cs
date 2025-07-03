@@ -5,6 +5,9 @@ namespace TodoWeb.Infrastructures
 {
     public interface IApplicationDbContext
     {
+
+        public DbSet<TEntity> Set<TEntity>()
+            where TEntity : class;
         public DbSet<ToDo> ToDos { get; set; }
         public DbSet<CourseStudent> CourseStudent { get; set; }
         public DbSet<Student> Students { get; set; }
