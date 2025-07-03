@@ -6,8 +6,8 @@ namespace TodoWeb.Service.Services.Students
 {
     public interface IStudentService
     {
-        public IEnumerable<StudentViewModel> GetStudentAsync(int? studentId);
-        public IEnumerable<StudentViewModel> GetStudentsAsync();
+        public Task<IEnumerable<StudentViewModel>> GetStudentAsync(int? studentId);
+        public Task<IEnumerable<StudentViewModel>> GetStudentsAsync();
         public StudentCourseDetailViewModel GetStudentDetails(int id);
         public StudentPagingViewModel GetStudents(int? schoolId, string? sortBy, bool isDescending, int? pageSize, int? pageIndex);
         public IEnumerable<StudentViewModel> SearchStudents(string searchTerm);

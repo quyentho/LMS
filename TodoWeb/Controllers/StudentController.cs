@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TodoWeb.ActionFilters;
@@ -35,9 +36,9 @@ namespace TodoWeb.Controllers
         }
 
         [HttpGet("/AllStudents")]
-        public IActionResult GetAllStudents()
+        public async Task<IActionResult> GetAllStudents()
         {
-            var result = _studentService.GetStudentsAsync();
+            var result = await _studentService.GetStudentsAsync();
             if (result.IsNullOrEmpty())
             {
                 return NotFound();

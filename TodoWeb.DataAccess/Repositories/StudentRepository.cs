@@ -6,26 +6,14 @@ using TodoWeb.Infrastructures;
 
 namespace TodoWeb.DataAccess.Repositories
 {
-    public class CacheRepository : IStudentRepository 
-    {
+    //public class CacheRepository : IStudentRepository 
+    //{
 
-        public CacheRepository(IStudentRepository studentRepository, IMemoryCache memory)
-        {
+    //    public CacheRepository(IStudentRepository studentRepository, IMemoryCache memory)
+    //    {
             
-        }
-        public async Task<IEnumerable<Student>> GetStudentsAsync(int? studentId, Expression<Func<Student, object>>? include)
-        {
-            var student = Memory.get(studentId)
-
-            if (student != null)
-            {
-                return student;
-            }
-            
-            var students = await studentRepository.GetStudentsAsync(studentId, include);
-        }
-
-    }
+    //    }
+    //}
     public class StudentRepository : IStudentRepository
     {
         private readonly IApplicationDbContext _dbContext;
