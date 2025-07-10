@@ -11,6 +11,5 @@ namespace TodoWeb.Domains.Entities
         public decimal? FinalScore { get; set; }
         
         public virtual CourseStudent CourseStudent { get; set; }
-
     }
 }

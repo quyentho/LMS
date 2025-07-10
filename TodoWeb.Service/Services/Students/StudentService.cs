@@ -20,76 +20,25 @@ namespace TodoWeb.Service.Services.Students
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _cache;
-        private readonly IStudentRepository _studentRepository;
+        private readonly IGenericRepository<Student> _studentRepository;
+        private readonly ISchoolRepository _schoolRepository;
 
-        public StudentService(IApplicationDbContext context, IMapper mapper, IMemoryCache cache, IStudentRepository studentRepository)
+        public StudentService(IApplicationDbContext context, IMapper mapper, IMemoryCache cache, IGenericRepository<Student> studentRepository, ISchoolRepository schoolRepository)
         {
             _context = context;
             _mapper = mapper;
             _cache = cache;
             this._studentRepository = studentRepository;
+            this._schoolRepository = schoolRepository;
         }
-        public async Task<IEnumerable<StudentViewModel>> GetStudentAsync(int? studentId)
+        public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync(int? studentId)
         {
-            var students = await _studentRepository.GetStudentsAsync(studentId, s => s.School);
+            var students = await _studentRepository.GetAllAsync(studentId, s => s.School);
 
             var result = _mapper.Map<List<StudentViewModel>>(students);
             return result;
         }
-
-        public async Task<IEnumerable<StudentViewModel>> GetStudentsAsync()
-        {
-            var data = await _cache.GetOrCreate(STUDENT_KEY, async entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromSeconds(30);//sliding cập nhật lại thời gian ở mỗi lần request
-                return await GetAllStudentAsync();
-            });
-            return data;
-        }
-
-        private async Task<IEnumerable<StudentViewModel>> GetAllStudentAsync()
-        {
-            return await GetStudentAsync(null);
-        }
-
-
-        //IQueryable cos khar nang build leen 1 cau query cos kha nang mo rong(extension)
-        //public IEnumerable<StudentViewModel> GetStudents(int? schoolId)
-        //{
-        //    //query = slect * from student 
-        //    //join school on student.sId = School.id
-        //    var query = _context.Students
-        //        .Where(student => student.Status != Constants.Enums.Status.Deleted)
-        //        .Include(student => student.School)//icludeQueryAble
-        //        .AsQueryable();//build leen 1 cau query
-
-        //    if (schoolId.HasValue)
-        //    {
-        //        //query = slect * from student 
-        //        //join school on student.sId = School.id
-        //        //Where(x => x.S.Id == schoolId)
-        //        query = query.Where(x => x.School.Id == schoolId);//add theem ddk 
-        //    }
-        //    //Select 
-        //    //Id = x.Id,
-        //    //FullName = x.FirstName + x.LastName,
-        //    //SchoolName = x.School.Name,
-        //    //from student 
-        //    //join school on student.schoolId = School.id
-        //    //Where(x => x.SId == schoolId) (depend if schoolId is not null)
-        //    var result = _mapper.ProjectTo<StudentViewModel>(query).ToList();
-        //    return result;
-
-        //    //return query.Select(x => new StudentViewModel
-        //    //{
-        //    //    Id = x.Id,
-        //    //    FullName = x.FirstName + " " + x.LastName,
-        //    //    Age = x.Age,
-        //    //    SchoolName = x.School.Name,
-        //    //}).ToList();//khi minhf chaams to list thi entity framework moi excute cau query 
-        //    //chua to list thif se build tren memory
-        //}
-
+     
         public StudentPagingViewModel GetStudents(int? schoolId, string? sortBy, bool isDescending, int? pageSize, int? pageIndex)
         {
             if (pageSize <= 0 || pageIndex <= 0)
@@ -194,21 +143,22 @@ namespace TodoWeb.Service.Services.Students
             return result;
         }
 
-        public int Post(StudentViewModel student)
+        public async Task<int> PostAsync(StudentViewModel student)
         {
             //kiểm tra xem student id có bị trùng hay không
-            var dupID = _context.Students.Find(student.Id);
-            if (dupID != null || student.Id < 1)
+            var dupID = await _studentRepository.GetByIdAsync(student.Id);
+            if (dupID != null)
             {
-                return -1;
+                throw new InvalidOperationException($"Student ID: {student.Id} already exists or is invalid.");
             }
+
             var name = student.FullName.Split(' ');
             //lấy school nhờ vào school name
-            var school = _context.School.FirstOrDefault(s => s.Name.Equals(student.SchoolName));//không dùng where bởi vì tìm ra một list
+            var school = await _schoolRepository.GetSchoolByNameAsync(student.SchoolName);//không dùng where bởi vì tìm ra một list
 
             if (school == null)
             {
-                return -1;
+                throw new InvalidOperationException($"School with name {student.SchoolName} does not exist.");
             }
 
             var data = new Student
@@ -220,14 +170,11 @@ namespace TodoWeb.Service.Services.Students
                 School = school,
 
             };
-            _context.Students.Add(data);
-            _context.SaveChanges();
-            _cache.Remove(STUDENT_KEY);
-            return data.Id;
 
+            return await _schoolRepository.AddAsync(school);
         }
 
-        public int Put(StudentViewModel student)
+        public async Task<int> PutAsync(StudentViewModel student)
         {
             //tìm student
             var data = _context.Students.Find(student.Id);
@@ -237,60 +184,27 @@ namespace TodoWeb.Service.Services.Students
             }
             var name = student.FullName.Split(' ');
             //kiểm tra xem người dùng có đưa đúng tên school
-            var school = _context.School.FirstOrDefault(s => s.Name.Equals(student.SchoolName));//không dùng where bởi vì tìm ra một list
+            var school = _schoolRepository.GetSchoolByNameAsync(student.SchoolName);
+
             if (school == null)
             {
-                return -1;
+                throw new InvalidOperationException($"School with name {student.SchoolName} does not exist.");
             }
-            //data.FirstName = name[0];
-            //data.LastName = string.Join(" ", name.Skip(1));
-            //data.SId = school.Id;
-            //data.School = school;
-            //data.Balance = student.Balance;
+
             _mapper.Map(student, data);
-            _context.SaveChanges();
+            await _studentRepository.UpdateAsync(data);
             return data.Id;
         }
 
-        public int Delete(int studentID)
+        public async Task<int> DeleteAsync(int studentID)
         {
-            var data = _context.Students.Find(studentID);
+            var data = await _studentRepository.GetByIdAsync(studentID);
             if (data == null)
             {
-                return -1;
+                throw new InvalidOperationException($"Student with ID {studentID} does not exist.");
             }
-            _context.Students.Remove(data);
-            _context.SaveChanges();
-            return data.Id;
-        }
 
-        public StudentCourseDetailViewModel GetStudentDetails(int id)
-        {
-            var query = _context.Students
-                .Where(student => student.Status != Constants.Enums.Status.Deleted)
-                .Include(student => student.CourseStudent)
-                .ThenInclude(cs => cs.Course);
-
-            var student = query.FirstOrDefault(x => x.Id == id);//không dùng where bởi vì trả list
-            //excute lúc này luôn, excute khi mình chấm cái gì đó mà kéo dữ liệu từ database thì nó sẽ excute 
-            if (student == null)
-            {
-                return null;
-            }
-            //projectto dùng khi muốn map một câu query
-            //còn map thì dùng khi muốn map một object
-            return _mapper.Map<StudentCourseDetailViewModel>(student);
-
-            //return new StudentCourseDetailViewModel
-            //{
-            //    StudentId = student.Id,
-            //    StudentName = student.FirstName + " " + student.LastName,
-            //    Courses = student.CourseStudent.Select(cs => new CourseViewModel
-            //    {
-            //        CourseId = cs.CourseId,
-            //        CourseName = cs.Course.Name
-            //    }).ToList()
-            //};
+            return await _studentRepository.DeleteAsync(data);
         }
     }
 }

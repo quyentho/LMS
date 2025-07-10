@@ -18,7 +18,7 @@ namespace TodoWeb.Service.Services.Courses
         }
         public async Task<IEnumerable<CourseViewModel>> GetCoursesAsync(int? courseId)
         {
-            var courses = await _courseRepository.GetCoursesAsync(courseId);
+            var courses = await _courseRepository.GetAllAsync(courseId);
 
             return _mapper.Map<List<CourseViewModel>>(courses);
         }
@@ -35,7 +35,7 @@ namespace TodoWeb.Service.Services.Courses
 
         public async Task<int> PutAsync(CourseViewModel courseViewModel)//src
         {
-            var oldCourse = await _courseRepository.GetCourseByIdAsync(courseViewModel.CourseId);
+            var oldCourse = await _courseRepository.GetByIdAsync(courseViewModel.CourseId);
 
             if (oldCourse == null || oldCourse.Status == Constants.Enums.Status.Deleted)
             {
@@ -53,7 +53,13 @@ namespace TodoWeb.Service.Services.Courses
 
         public async Task<int> DeleteAsync(int courseId)
         {
-            return await _courseRepository.DeleteAsync(courseId);
+            var course = await _courseRepository.GetByIdAsync(courseId);
+            if (course == null)
+            {
+                throw new InvalidOperationException($"Course with ID {courseId} does not exist.");
+            }
+
+            return await _courseRepository.DeleteAsync(course);
         }
     }
 }

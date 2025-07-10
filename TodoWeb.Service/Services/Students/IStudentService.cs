@@ -6,13 +6,11 @@ namespace TodoWeb.Service.Services.Students
 {
     public interface IStudentService
     {
-        public Task<IEnumerable<StudentViewModel>> GetStudentAsync(int? studentId);
-        public Task<IEnumerable<StudentViewModel>> GetStudentsAsync();
-        public StudentCourseDetailViewModel GetStudentDetails(int id);
+        public Task<IEnumerable<StudentViewModel>> GetStudentsAsync(int? studentId);
         public StudentPagingViewModel GetStudents(int? schoolId, string? sortBy, bool isDescending, int? pageSize, int? pageIndex);
         public IEnumerable<StudentViewModel> SearchStudents(string searchTerm);
-        public int Post(StudentViewModel student);
-        public int Put(StudentViewModel student);
-        public int Delete(int studentID);
+        public Task<int> PostAsync(StudentViewModel student);
+        public Task<int> PutAsync(StudentViewModel student);
+        public Task<int> DeleteAsync(int studentID);
     }
 }
