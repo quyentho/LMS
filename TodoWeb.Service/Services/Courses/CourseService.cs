@@ -6,12 +6,21 @@ using TodoWeb.Infrastructures;
 
 namespace TodoWeb.Service.Services.Courses
 {
+    public enum CourseStatus
+    {
+        NotStarted,
+        InProgress,
+        Finished,
+        Canceled,
+        Deleted
+    }
+
     public class CourseService : ICourseService
     {
         private readonly IMapper _mapper;
         private readonly ICourseRepository _courseRepository;
 
-        public CourseService(IApplicationDbContext context, IMapper mapper, ICourseRepository courseRepository)
+        public CourseService(IMapper mapper, ICourseRepository courseRepository)
         {
             _mapper = mapper;
             _courseRepository = courseRepository;
@@ -23,10 +32,15 @@ namespace TodoWeb.Service.Services.Courses
             return _mapper.Map<List<CourseViewModel>>(courses);
         }
 
-        public async Task<int> Post(PostCourseViewModel course)
+        public async Task<int> PostAsync(PostCourseViewModel course)
         {
             var dupCourseName = await _courseRepository
                 .GetCourseByNameAsync(course.CourseName);
+
+            if (dupCourseName != null)
+            {
+                throw new InvalidOperationException($"Course with name '{course.CourseName}' already exists.");
+            }
 
             var data = _mapper.Map<Course>(course);
 
@@ -41,8 +55,6 @@ namespace TodoWeb.Service.Services.Courses
             {
                 throw new InvalidOperationException("Course not found or has been deleted.");
             }
-
-            var dupCourseName = await _courseRepository.GetCourseByNameAsync(oldCourse.Name);
 
             _mapper.Map(courseViewModel, oldCourse);
 
