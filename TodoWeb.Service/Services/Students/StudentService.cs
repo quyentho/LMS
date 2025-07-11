@@ -16,7 +16,6 @@ namespace TodoWeb.Service.Services.Students
 
     public class StudentService : IStudentService
     {
-        private const string STUDENT_KEY = "StudentKey";
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _cache;

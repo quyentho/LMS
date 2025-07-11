@@ -78,7 +78,7 @@ namespace TodoWeb.Controllers
         {
             try
             {
-                return Ok(await _courseService.Post(course));
+                return Ok(await _courseService.PostAsync(course));
             }
             catch (Exception ex)
             {
